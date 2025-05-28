@@ -26,7 +26,14 @@ export default function Main() {
 
   return (
     <main>
-      
+      <div className="container">
+        <h1 className="my-4 text-center">Cast</h1>
+
+       {loading && <p>Loading...</p>}
+
+       
+      </div>
+
     </main>
   );
 }
