@@ -12,7 +12,9 @@ export default function Main() {
   const [loadingActors, setLoadingActors] = useState(true);
   const [loadingActresses, setLoadingActresses] = useState(true);
   const [showActors, setShowActors] = useState(true);
+  const [nameFilter, setNameFilter] = useState(``);
 
+  
   useEffect(() => {
     axios.get(actorsUrl)
       .then(response => {
@@ -25,29 +27,59 @@ export default function Main() {
       .finally(() => {
         setLoadingActors(false);
       })
-  }, []);
-
+    }, []);
+    
   useEffect(() => {
     axios.get(actressesUrl)
-      .then(response => {
-        console.log(`Dati ricevuti:`, response.data);
-        setActresses(response.data);
-      })
-      .catch(error => {
-        console.log(`Errore nel recupero dati:`, error)
-      })
-      .finally(() => {
-        setLoadingActresses(false);
-      })
+    .then(response => {
+      console.log(`Dati ricevuti:`, response.data);
+      setActresses(response.data);
+    })
+    .catch(error => {
+      console.log(`Errore nel recupero dati:`, error)
+    })
+    .finally(() => {
+      setLoadingActresses(false);
+    })
   }, []);
+    
+  const filteredActors = actors.filter(actor =>
+    actor.name.toLowerCase().includes(nameFilter.toLowerCase())
+  );
+  
+  const filteredActresses = actresses.filter(actress =>
+    actress.name.toLowerCase().includes(nameFilter.toLowerCase())
+  );
 
   return (
     <main>
       <div className="container">
         <h1 className="my-4 text-center text-white fw-bold">ATTORI & ATTRICI</h1>
 
+        <input 
+          className="form-control my-3"
+          type="text" 
+          placeholder="Cerca per Nome"
+          value={nameFilter}
+          onChange={(e) => setNameFilter(e.target.value)}
+        />
+
+        <h2 className="fw-bold">Attori</h2>
+        <div className="row row-cols-4 g-4 mb-5">
+          {filteredActors.map(actor => (
+            <ActorCard key={actor.id} actor={actor} />
+          ))}
+        </div>
+
+        <h2 className="fw-bold">Attrici</h2>
+        <div className="row row-cols-4 g-4 mb-5">
+          {filteredActresses.map(actor => (
+            <ActorCard key={actor.id} actor={actor} />
+          ))}
+        </div>
+
         {/* BONUS 2 */}
-        <div className="card-container">
+        {/* <div className="card-container">
           <h2 className="fw-bold">Attori</h2>
           <div className="row row-cols-4 g-4 mb-5">
             {actors.map(actor => (
@@ -62,7 +94,7 @@ export default function Main() {
               <ActorCard key={actress.id} actor={actress} />
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* BONUS 1 */}
         {/* <button className="btn btn-primary my-3" onClick={() => setShowActors(!showActors)}>
