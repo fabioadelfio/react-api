@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import ActorCard from "../actors/ActorCard";
 
 export default function Main() {
 
@@ -14,26 +15,29 @@ export default function Main() {
         console.log(`Dati ricevuti:`, response.data);
         setActors(response.data);
       })
-
       .catch(error => {
         console.log(`Errore nel recupero dati:`, error)
       })
-
       .finally(() => {
         setLoading(false);
-      });
+      })
   }, []);
 
   return (
     <main>
       <div className="container">
-        <h1 className="my-4 text-center">Cast</h1>
+        <h1 className="my-4 text-center text-white fw-bold">Actors</h1>
 
-       {loading && <p>Loading...</p>}
+        {loading && <p>Loading...</p>}
 
-       
+        <div className="card-container">
+          <div className="row row-cols-4 g-4">
+            {actors.map(actor => (
+            <ActorCard key={actor.id} actor={actor} />
+          ))}
+          </div>
+        </div>
       </div>
-
     </main>
   );
 }
