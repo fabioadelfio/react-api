@@ -44,20 +44,39 @@ export default function Main() {
   return (
     <main>
       <div className="container">
-        <h1 className="my-4 text-center text-white fw-bold">{showActors ? `ATTORI` : `ATTRICI`}</h1>
+        <h1 className="my-4 text-center text-white fw-bold">ATTORI & ATTRICI</h1>
 
-        <button className="btn btn-primary my-3" onClick={() => setShowActors(!showActors)}>
+        {/* BONUS 2 */}
+        <div className="card-container">
+          <h2 className="fw-bold">Attori</h2>
+          <div className="row row-cols-4 g-4 mb-5">
+            {actors.map(actor => (
+              <ActorCard key={actor.id} actor={actor} />
+            ))}
+          </div>
+
+          <h2 className="fw-bold">Attrici</h2>
+
+          <div className="row row-cols-4 g-4">
+            {actresses.map(actress => (
+              <ActorCard key={actress.id} actor={actress} />
+            ))}
+          </div>
+        </div>
+
+        {/* BONUS 1 */}
+        {/* <button className="btn btn-primary my-3" onClick={() => setShowActors(!showActors)}>
           {showActors ? "Mostra Attrici" : "Mostra Attori"}
-        </button>
+        </button> */}
 
-        {showActors && loadingActors && (
+        {/* {showActors && loadingActors && (
           <p className="fs-1 fw-bold text-center">Caricamento attori...</p>
         )}
         {!showActors && loadingActresses && (
           <p className="fs-1 fw-bold text-center">Caricamento attrici...</p>
-        )}
+        )} */}
 
-        {showActors && !loadingActors && (
+        {/* {showActors && !loadingActors && (
           <div className="card-container">
             <div className="row row-cols-4 g-4">
               {actors.map(actor => (
@@ -75,7 +94,8 @@ export default function Main() {
               ))}
             </div>
           </div>
-        )}
+        )} */}
+
       </div>
     </main>
   );
