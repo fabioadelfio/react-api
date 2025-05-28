@@ -4,13 +4,17 @@ import ActorCard from "../actors/ActorCard";
 
 export default function Main() {
 
-  const apiUrl = "https://lanciweb.github.io/demo/api/actors/";
+  const actorsUrl = "https://lanciweb.github.io/demo/api/actors/";
+  const actressesUrl = "https://lanciweb.github.io/demo/api/actresses/";
 
   const [actors, setActors] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [actresses, setActresses] = useState([]);
+  const [loadingActors, setLoadingActors] = useState(true);
+  const [loadingActresses, setLoadingActresses] = useState(true);
+  const [showActors, setShowActors] = useState(true);
 
   useEffect(() => {
-    axios.get(apiUrl)
+    axios.get(actorsUrl)
       .then(response => {
         console.log(`Dati ricevuti:`, response.data);
         setActors(response.data);
@@ -19,24 +23,59 @@ export default function Main() {
         console.log(`Errore nel recupero dati:`, error)
       })
       .finally(() => {
-        setLoading(false);
+        setLoadingActors(false);
+      })
+  }, []);
+
+  useEffect(() => {
+    axios.get(actressesUrl)
+      .then(response => {
+        console.log(`Dati ricevuti:`, response.data);
+        setActresses(response.data);
+      })
+      .catch(error => {
+        console.log(`Errore nel recupero dati:`, error)
+      })
+      .finally(() => {
+        setLoadingActresses(false);
       })
   }, []);
 
   return (
     <main>
       <div className="container">
-        <h1 className="my-4 text-center text-white fw-bold">Actors</h1>
+        <h1 className="my-4 text-center text-white fw-bold">{showActors ? `ATTORI` : `ATTRICI`}</h1>
 
-        {loading && <p>Loading...</p>}
+        <button className="btn btn-primary my-3" onClick={() => setShowActors(!showActors)}>
+          {showActors ? "Mostra Attrici" : "Mostra Attori"}
+        </button>
 
-        <div className="card-container">
-          <div className="row row-cols-4 g-4">
-            {actors.map(actor => (
-            <ActorCard key={actor.id} actor={actor} />
-          ))}
+        {showActors && loadingActors && (
+          <p className="fs-1 fw-bold text-center">Caricamento attori...</p>
+        )}
+        {!showActors && loadingActresses && (
+          <p className="fs-1 fw-bold text-center">Caricamento attrici...</p>
+        )}
+
+        {showActors && !loadingActors && (
+          <div className="card-container">
+            <div className="row row-cols-4 g-4">
+              {actors.map(actor => (
+                <ActorCard key={actor.id} actor={actor} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+
+        {!showActors && !loadingActresses && (
+          <div className="card-container">
+            <div className="row row-cols-4 g-4">
+              {actresses.map(actress => (
+                <ActorCard key={actress.id} actor={actress} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
